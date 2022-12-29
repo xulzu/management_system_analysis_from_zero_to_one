@@ -49,7 +49,7 @@ rpc后台多服务，前端nginx代理
 
 ## eslint+prettier 的使用，如果想直接看如何配置 `.eslintrc.js` 和vscode的 `settings.json` 。可直接前往章节[配置示例](#eslintrcjs-%E5%92%8Cvscode-%E4%B8%AD-settingsjson-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B)查看
 
-eslint是用来检查代码中是否有没有使用的变量，使用用了不符合规范的写法。可以通过一套规则检查代码不符合规范的部分来实现整个项目代码规范的统一。
+eslint是用来检查代码中是否有没有使用的变量，使用了不符合规范的写法。可以通过一套规则检查代码不符合规范的部分来实现整个项目代码规范的统一。
 
 ### vscode如何针对vue2项目使用eslint？
 
@@ -62,7 +62,7 @@ eslint是用来检查代码中是否有没有使用的变量，使用用了不�
 
 ```
 
-还有一点就是需要在vscode开启保存时自动检查并修复的功能，打开vscode的 `ettings.json` 配置文件。然后配置以下配置
+还有一点就是需要在vscode开启保存时自动检查并修复的功能，打开vscode的 `settings.json` 配置文件。然后配置以下配置
 
 ```
 {
@@ -190,7 +190,6 @@ module.exports = {
 {
 	"editor.formatOnSave": true, 
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"eslint.enable": true,
 	"editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
   },
