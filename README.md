@@ -86,10 +86,10 @@ npm i eslint -D
 
 3、在项目的根目录中新建eslint的配置文件（也可以package.json中的 `eslintConfig` 字段下配置，效果和配置文件一样的）。配置文件的格式可以是 `.eslintrc.js` , `.eslintrc.json` , `.eslintrc.yaml` . 下面以在vue2项目使用 `.eslintrc.js` 举例
 
-先安装下三个插件 `@babel/eslint-plugin` , `eslint-config-prettier` , `eslint-plugin-vue` , 后面会说到具体作用
+先安装下几个插件 `@babel/core` , `@babel/eslint-parser` , `eslint-config-prettier` , `eslint-plugin-vue` , 后面会说到具体作用。其中 `@babel/core` 是因为 `@babel/eslint-parser` 依赖了它
 
 ```
-npm i @babel/eslint-plugin eslint-plugin-vue  eslint-config-prettier -D
+npm i @babel/eslint-parser eslint-plugin-vue  eslint-config-prettier -D
 ```
 
 ```js
@@ -100,7 +100,7 @@ module.exports = {
         browser: true,
         es6: true,
         node: true,
-    }, //
+    },
     parser: "@babel/eslint-parser",
     parserOptions: {
         sourceType: "module",
@@ -108,7 +108,6 @@ module.exports = {
     extends: ["eslint:recommended", "plugin:vue/essential", "prettier"],
     rules: {
         camelcase: "warn",
-        quotes: ["error", "single"],
     },
 };
 ```
@@ -162,7 +161,7 @@ npm i eslint-config-prettier -D
 ### `.eslintrc.js` 和vscode 中 `settings.json` 配置示例
 
 ```
-npm i @babel/eslint-plugin eslint-plugin-vue eslint-config-prettier eslint -D
+npm i @babel/eslint-parser eslint-plugin-vue @babel/core eslint-config-prettier eslint -D
 ```
 
 ```
@@ -180,16 +179,19 @@ module.exports = {
     extends: ["eslint:recommended", "plugin:vue/essential", "prettier"],
     rules: {
         camelcase: "warn",
-        quotes: ["error", "single"],
+        
     },
 };
 ```
+
+注意别把vscode配置中 `"eslint.enable": false` 设置给自己设置成了false。保证eslint开启。这个选项默认是开启的
 
 ```
 //settings.json
 {
 	"editor.formatOnSave": true, 
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"eslint.enable": true,
 	"editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
   },
