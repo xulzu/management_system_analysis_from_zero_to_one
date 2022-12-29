@@ -101,8 +101,8 @@ module.exports = {
         es6: true,
         node: true,
     },
-    parser: "@babel/eslint-parser",
     parserOptions: {
+        parser: "@babel/eslint-parser",
         sourceType: "module",
     },
     extends: ["eslint:recommended", "plugin:vue/essential", "prettier"],
@@ -116,7 +116,7 @@ module.exports = {
 
 ![图 1](images/6f47387b0fa60115ab05f56a2f09a1039c8a49c41fa1fa39daa0518e8c1377b7.png)
 
-> parser : 定义用什么解析器来解析js文件。这里，如果不设置的话默认用的是eslint的 `Espree` 。这里选比较常用的babel的解析器。能更好的配合babel
+> parser : 定义用什么解析器来解析js文件。这里，如果不设置的话默认用的是eslint的 `Espree` 。这里选比较常用的babel的解析器。能更好的配合babel。注意vue项目中如果需要用其他解析器，一定要配置在 `parserOptions` 参数下。因为解析vue文件需要用到 `eslint-plugin-vue ` 中的 `vue-eslint-parser` 。如果更改eslint的parser的话就不能解析vue文件了，所以只能将自定义的解析器（类似 `@babel/eslint-parser` ）放在 `parserOptions` 作为一个解析器参数给传给 `vue-eslint-parser` 中去
 
 > extends: 继承其他已经配置好的规则。 `eslint:recommended` 是eslint包装好的核心规则，只要继承它就能使用社区已经总结定义好的一些规则配置。这个一般是必须的， `plugin:vue/essential` 是来与于插件 `eslint-plugin-vue` 中的配置，其定义了对vue2文件的解析，和对vue2一些语法的规则。（如果项目用的是vue3，可以直接使用插件 `eslint-plugin-vue` 中携带的另一套配置 `plugin:vue/vue3-recommended` ）。 `prettier` 是来自于插件 `eslint-config-prettier` 中携带的配置，这个主要用于把eslint中的那部分和vscode中prettier插件格式化规则冲突的部分给关闭，关闭的都是些和格式化相关的非必要规则。注意关闭的是eslint中的规则，而不是vscode中prettier插件的规则
 
@@ -172,8 +172,8 @@ module.exports = {
         es6: true,
         node: true,
     }, 
-    parser: "@babel/eslint-parser",
     parserOptions: {
+        parser: "@babel/eslint-parser",
         sourceType: "module",
     },
     extends: ["eslint:recommended", "plugin:vue/essential", "prettier"],
