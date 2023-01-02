@@ -205,7 +205,47 @@ module.exports = {
 
 测试流程，分环境部署
 
-# 自动化部署
+# 部署相关
+
+docker 
+
+安装
+
+```
+curl -sSL https://get.daocloud.io/docker | sh
+```
+
+docker是一个常驻服务，首次安装或者重启机器都需要将docker给启动起来后才能针对docker进行其他动作
+
+```
+sudo systemctl start docker
+```
+
+查看docker是否成功启动
+
+```
+sodu systemctl is-active docker 
+```
+
+需要开启操作系统的防火墙端口访问，不然无妨访问系统的指定端口
+
+```
+#查看已经开通的端口
+firewall-cmd --list-port
+#查看防火墙状态
+firewall-cmd --state
+#开启防火墙
+systemctl start firewall
+#关闭
+systemctl stop firewall
+#重启
+systemctl restart firewall
+#开发单个端口，以80端口为例，--permanent是用来表示机器重启后仍旧生效
+firewall-cmd --zone=public --add-port=80/tcp --permanent 
+#关闭端口
+firewall-cmd --zone=public --remove-port=80/tcp --permanent 
+
+```
 
 cli、shell脚本、云服务器
 
