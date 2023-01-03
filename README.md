@@ -158,6 +158,8 @@ npm i eslint-config-prettier -D
 }
 ```
 
+注意， `eslint-config-prettier` 是用来关闭eslint中那些和prettier冲突的格式化规则的。这里存在一个问题， `.eslintrc.js` 中 `rules` 配置中配置的规则优先级是很高的，不能被 `eslint-config-prettier` 插件忽略掉，所以尽量别在rules配那种和 `prettier` 冲突的格式化规则。那些会冲突在实际配的时候能很明显提示的，不用刻意关注。冲突的时候把自己配的相关规则删了即可
+
 ### `.eslintrc.js` 和vscode 中 `settings.json` 配置示例
 
 ```
