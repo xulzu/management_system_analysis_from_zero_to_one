@@ -5,19 +5,20 @@
 * [管理系统组成](#%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%BB%84%E6%88%90)
 * [登陆](#%E7%99%BB%E9%99%86)
 * [权限](#%E6%9D%83%E9%99%90)
+  + [R-BAC权限模型](#r-bac%E6%9D%83%E9%99%90%E6%A8%A1%E5%9E%8B)
 * [代理](#%E4%BB%A3%E7%90%86)
 * [开发](#%E5%BC%80%E5%8F%91)
 * [框架](#%E6%A1%86%E6%9E%B6)
 * [构建工具](#%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7)
 * [代码规范](#%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83)
-  + [eslint+prettier 的使用，如果想直接看如何配置 `.eslintrc.js` 和vscode的 `settings.json` 。可直接前往当前章节末尾查看“”](#eslintprettier-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%A6%82%E6%9E%9C%E6%83%B3%E7%9B%B4%E6%8E%A5%E7%9C%8B%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE-eslintrcjs-%E5%92%8Cvscode%E7%9A%84-settingsjson-%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%89%8D%E5%BE%80%E5%BD%93%E5%89%8D%E7%AB%A0%E8%8A%82%E6%9C%AB%E5%B0%BE%E6%9F%A5%E7%9C%8B)
+  + [eslint+prettier 的使用，如果想直接看如何配置 `.eslintrc.js` 和vscode的 `settings.json` 。可直接前往章节配置示例查看](#eslintprettier-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%A6%82%E6%9E%9C%E6%83%B3%E7%9B%B4%E6%8E%A5%E7%9C%8B%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE-eslintrcjs-%E5%92%8Cvscode%E7%9A%84-settingsjson-%E5%8F%AF%E7%9B%B4%E6%8E%A5%E5%89%8D%E5%BE%80%E7%AB%A0%E8%8A%82%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B%E6%9F%A5%E7%9C%8B)
     - [vscode如何针对vue2项目使用eslint？](#vscode%E5%A6%82%E4%BD%95%E9%92%88%E5%AF%B9vue2%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8eslint)
     - [为什么要用prettier？以及如何使用？](#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8prettier%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
     - [eslint 和prettier同时使用造成的规则冲突及解决办法](#eslint-%E5%92%8Cprettier%E5%90%8C%E6%97%B6%E4%BD%BF%E7%94%A8%E9%80%A0%E6%88%90%E7%9A%84%E8%A7%84%E5%88%99%E5%86%B2%E7%AA%81%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95)
     - [`.eslintrc.js` 和vscode 中 `settings.json` 配置示例](#eslintrcjs-%E5%92%8Cvscode-%E4%B8%AD-settingsjson-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B)
   + [git提交前eslint校验](#git%E6%8F%90%E4%BA%A4%E5%89%8Deslint%E6%A0%A1%E9%AA%8C)
 * [测试](#%E6%B5%8B%E8%AF%95)
-* [自动化部署](#%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2)
+* [部署相关](#%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3)
 * [服务质量维护](#%E6%9C%8D%E5%8A%A1%E8%B4%A8%E9%87%8F%E7%BB%B4%E6%8A%A4)
 * [性能监控](#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7)
 
@@ -31,7 +32,20 @@ SS0重定向
 
 # 权限
 
-通用权限系统设定
+## R-BAC权限模型
+
+在常规运营系统中，一个合理的权限系统不仅能避免数据误操作，也能避免数据的泄漏。权限上的垂直越权指用户a有接口 `/search` 的权限，但是因为管控遗漏使得该用户也拥有了 `/query` 接口的权限。访问了不该访问的接口也即是垂直越权。水平越权指的用户通过同一个接口查询到了他不应该查到的数据。我们常见的权限模型是R-BAC `(Role-Based Access Control)` 权限模型，顾明思议该模型是基于角色来完成权限分配。在该模型中，我们可以将菜单url，接口等定义为基本资源。然后将不同的资源结合在一起定义为权限。之后在定义不同的角色关联上对应的权限。最后再将具体的用户关联上对应的角色。举一个简单的例子。
+* 资源：普通菜单，管理员专属菜单，普通接口，管理员专属接口。
+* 权限： 普通菜单权限（绑定了资源中的`普通菜单`）；普通接口权限（绑定了资源中的`普通接口`）； 管理员菜单权限(绑定了资源中的`管理员专属菜单`)；管理员接口权限（绑定了资源中的`管理员专属接口`）
+* 角色：通用人员 (关联了权限中的`普通菜单权限`和`普通接口权限`); 管理员（关联了权限中的`管理员菜单权限`和`管理员接口权`）
+
+![图 5](images/23aee08cf0581cf52c06d039635770e27d23f67280cb36022d58d47b956a7a1c.png)
+
+  
+
+通过上面的图，整个权限系统分为三层，资源，权限和角色。真实的用户只用和角色关联。其实从上面的图中可以看出权限那一层只是对资源的聚合，那为什么还需要单独定义一个权限这层呢，目的还是为了方便操作。因为角色那层的变动是较为频繁的。比如时常需要新增角色，这是如果直接绑定资源的话操作起来就很麻烦，具体例子就是假如存在一个权限叫 `文章的点赞与评价` ，里面聚合了数十个接口。这样新增角色的时候直接把该权限和新角色绑定上，新角色就能一次性关联上所有 `文章的点赞与评价` 功能相关的资源。
+
+该权限模型的使用缺点：由于是需要建立角色然后将真实的用户与之关联。随着管理人员的变动，因为后面的接手人无法容易得理解之前已经存在的每个角色的职责划分。所以后续的管理人员在权限变动时往往倾向于重新新建角色来控制权限，从而造成多个角色间很容易出现资源交叉。随着时间推移，角色会越变越多，权限关系越来越难以理解和管理。动辄几十上百的权限和角色让人十分头大
 
 # 代理
 
@@ -43,7 +57,37 @@ rpc后台多服务，前端nginx代理
 
 # 框架
 
-# 构建工具
+# 构建工具相关
+
+## webpack
+
+### webpack-chain
+
+### webpack-merge
+
+一个用来合并webpack配置文件的npm包, 其运算过程有点类似下面的方法，如果是数组则两个数组执行concat，如果是对象则同名key互相替换。
+
+```
+function merge_(obj1, obj2) {
+  if (typeof obj1 !== typeof obj2) return obj2;
+  if (Array.isArray(obj1)) {
+    return obj1.concat(obj2);
+  } else if (typeof obj1 === "object") {
+    for (let key in obj1) {
+      const ans = { ...obj1, ...obj2 };
+      if (key in obj2) {
+        ans[key] = merge_(obj1[key], obj2[key]);
+      }
+      return ans;
+    }
+    return obj2;
+  } else {
+    return obj2;
+  }
+}
+```
+
+## 脚手架cli
 
 # 代码规范
 
