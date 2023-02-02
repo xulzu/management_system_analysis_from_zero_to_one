@@ -43,3 +43,52 @@
 }
 
 ```
+
+# watch
+
+watch也是直接使用的Watcher来实现的。和computed不同的是watch在代码中定义时是定义了一个回调函数, 当上游数据变化时会触发回调函数。而computed定义的是一个getter，上游变化时只是翻转computed所对应的watcher的状态。等真正需要用到computed的value时才会调用getter去计算出正确结果。
+
+```
+//xx.vue
+{
+  watch:{
+    age:function cb(){
+      
+    }
+  }
+}
+```
+
+```
+const watcher = new Watcher(vm, 'age', cb, {user:true})
+```
+
+```
+//Watcher 中触发watch回调函数的逻辑
+ run () {
+    if (this.active) {
+      const value = this.get()
+      if (
+        value !== this.value ||
+        // Deep watchers and watchers on Object/Arrays should fire even
+        // when the value is the same, because the value may
+        // have mutated.
+        isObject(value) ||
+        this.deep
+      ) {
+        // set new value
+        const oldValue = this.value
+        this.value = value
+        if (this.user) {
+          try {
+            this.cb.call(this.vm, value, oldValue)
+          } catch (e) {
+            handleError(e, this.vm, `callback for watcher "${this.expression}"`)
+          }
+        } else {
+          this.cb.call(this.vm, value, oldValue)
+        }
+      }
+    }
+  }
+```

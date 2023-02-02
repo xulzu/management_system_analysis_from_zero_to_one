@@ -61,7 +61,33 @@ rpc后台多服务，前端nginx代理
 
 ## webpack
 
+webpack5不需要针对文件压缩做特殊处理，默认就会压缩的，优化的思路是把公共包拆成大小合适的小vendor，并且使用缓存配置避免每次打包时都要构建。
+一个配置例子
+
+```
+{
+  "optimization": {
+    "splitChunks": {
+      "cacheGroups": {
+        "vendors": {
+          "priority": -10,
+          "chunks": "initial"
+        },
+        "common": {
+          "name": "chunk-common",
+          "minChunks": 2,
+          "priority": -20,
+          "chunks": "initial",
+          "reuseExistingChunk": true
+        }
+      }
+    },
+}
+```
+
 ### webpack-chain
+
+因为webpack的配置文件是一个对象，对象层级很多，例如要修改 `config.module.rules[2].use[2]='vue-loader'` 这仅仅只是修改一个loader，因为路径太长所以十分不清晰，非常难以维护。而使用webpack-chain工具能够针对每一级配置设置一个名字，直接通过名字进行修改即可
 
 ### webpack-merge
 
@@ -302,4 +328,23 @@ cli、shell脚本、云服务器
 
 # 性能监控
 
-性能监控，数据埋点，指标统计
+## 页面性能衡量
+
+通过记录页面的加载时间，能大致衡量一个系统首页要多久才可用。
+通过记录页面的首字节时间，能大致判断网络的好坏卡顿情况。
+下面推荐几个好用的指标
+* fetchStart 表征了浏览器准备好使用 HTTP 请求来获取 (fetch) 文档的 UNIX 时间戳。这个时间点会在检查任何应用缓存之前. 其他指标可以和该指标相减得到花费的时长
+* responseStart 返回浏览器从服务器收到（或从本地缓存读取）第一个字节时的 Unix 毫秒时间戳
+* domInteractive 返回当前网页 DOM 结构结束解析、开始加载内嵌资源时的 Unix 毫秒时间戳
+* domContentLoadedEventEnd 返回当所有需要立即执行的脚本已经被执行（不论执行顺序）时的 Unix 毫秒时间戳。domInteractive如果设置async 不考虑执行script脚本的时间
+* loadEventStart 页面完全加载时间（触发window.load的时间）
+
+除了以上能直接通过 `performance.timing` 拿到的指标外，也可以定义其他指标。例如定义首屏时间为页面dom已经加载稳定且静态资源也加载完成的时间。
+
+> 这种指标考虑到了页面接口对首页加载的影响。可以通过 `MutationObserver` 来观察dom节点变化，如果一段时间内节点不再变化那说明首页的请求基本完成了。可以通过 `performance.getEntriesByType('resource')` 获取图片的加载时间。将两者取最大值来定义为首屏时间。
+
+统计首屏时间时还要主要去除掉那些偶然的数据，大致思路可以使用正态分布获取（10%-90%）出现频率内的统计数据。这样还可以更准确些
+
+## 页面异常率
+
+除了一些页面加载指标，也能通过记录页面的pv和出现异常的pv来统计页面异常率。以此分析代码质量，接口质量。
